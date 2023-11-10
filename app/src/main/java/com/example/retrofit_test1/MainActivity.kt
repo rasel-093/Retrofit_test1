@@ -1,10 +1,12 @@
 package com.example.retrofit_test1
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -22,14 +24,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.retrofit_test1.model.Todo
 import com.example.retrofit_test1.ui.theme.Retrofit_test1Theme
+import com.example.retrofit_test1.ui.theme.bodyBackground
+import com.example.retrofit_test1.ui.theme.topBarColor
 import com.example.retrofit_test1.view.TodoRow
 import com.example.retrofit_test1.viewmodel.TodoViewModel
 
 class MainActivity : ComponentActivity() {
+    val context = this
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +53,7 @@ class MainActivity : ComponentActivity() {
                         topBar = { TopAppBar(
                             title = { Text(text = "TodoList")},
                             colors = TopAppBarDefaults.smallTopAppBarColors(
-                                containerColor = Color.LightGray
+                                containerColor = Color(topBarColor.value)
                             )
                                     )
                                  }
@@ -63,21 +69,26 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TodoList(movieList: List<Todo>,innerPadding: PaddingValues) {
-    LazyColumn(modifier = Modifier.padding(innerPadding)){
+    val context = LocalContext.current
+    LazyColumn(
+        modifier = Modifier
+            .padding(innerPadding)
+            .background(bodyBackground)
+    ){
         itemsIndexed(items = movieList){index, item->
-            TodoRow(todo = item)
+            TodoRow(todo = item, context)
         }
     }
     
 }
-@Preview
-@Composable
-fun preview(){
-    val todo = Todo(
-        completed = true,
-        id = 10,
-        title = "Market",
-        userId = 20
-    )
-    TodoRow(todo = todo)
-}
+//@Preview
+//@Composable
+//fun preview(){
+//    val todo = Todo(
+//        completed = true,
+//        id = 10,
+//        title = "Market",
+//        userId = 20
+//    )
+//    TodoRow(todo = todo)
+//}
